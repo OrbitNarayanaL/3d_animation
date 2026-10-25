@@ -49,6 +49,8 @@ add_library(core
     src/core/Application.h
     src/core/Mesh.cpp
     src/core/Mesh.h
+    src/core/Selection.cpp
+    src/core/Selection.h
     deps/glad/glad.c
     deps/glad/glad.h
 )

@@ -6,8 +6,8 @@
 
 #### Step 2 Tasks
 - [x] **OBJ mesh import functionality** - Mesh data structure with LoadOBJ parser implemented
-- [ ] Vertex, edge, and face selection system
-- [ ] Basic mesh deformation framework
+- [x] **Vertex, edge, and face selection system** - Ray-triangle intersection with vertex selection implemented
+- [x] **Basic mesh deformation framework** - DeformSelectedVertex with GPU buffer updates
 - [ ] Sculpting brush implementation (Smooth, Grab, Inflate)
 - [ ] Mesh data structures and GPU buffer management (Enhanced)
 

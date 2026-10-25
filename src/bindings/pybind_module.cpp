@@ -1,6 +1,7 @@
 ﻿#include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 #include <pybind11/stl_bind.h>
+#include <pybind11/glm.h>
 #include "../core/Window.h"
 #include "../core/Renderer.h"
 #include "../core/Mesh.h"
@@ -20,9 +21,12 @@ PYBIND11_MODULE(renderer, m) {
         .def(py::init<>())
         .def_readonly("vertices", &Mesh::vertices)
         .def_readonly("indices", &Mesh::indices)
+        .def_readwrite("selected_vertex_index", &Mesh::m_selectedVertexIndex)
         .def("load_obj", &Mesh::LoadOBJ)
         .def("setup_mesh_buffers", &Mesh::SetupMeshBuffers)
-        .def("shutdown", &Mesh::Shutdown);
+        .def("shutdown", &Mesh::Shutdown)
+        .def("find_closest_vertex_ray", &Mesh::FindClosestVertexRay)
+        .def("deform_selected_vertex", &Mesh::DeformSelectedVertex);
 
     py::class_<Window>(m, "Window")
         .def(py::init<>())

@@ -5,8 +5,10 @@
 #include <iostream>
 #include <map>
 #include <tuple>
+#include <limits>
+#include <glm/glm.hpp>
 
-Mesh::Mesh() : VAO(0), VBO(0), EBO(0), m_buffersInitialized(false)
+Mesh::Mesh() : VAO(0), VBO(0), EBO(0), m_selectedVertexIndex(-1)
 {
 }
 
@@ -87,7 +89,6 @@ bool Mesh::LoadOBJ(const std::string& filePath)
         }
     }
 
-    // Simple triangulation - assume triangles
     vertices.clear();
     indices.clear();
 
@@ -134,23 +135,19 @@ void Mesh::SetupMeshBuffers()
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), indices.data(), GL_STATIC_DRAW);
 
-    // Position
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, position));
-    // Normal
     glEnableVertexAttribArray(1);
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, normal));
-    // TexCoords
     glEnableVertexAttribArray(2);
     glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, texCoords));
 
     glBindVertexArray(0);
-    m_buffersInitialized = true;
 }
 
 void Mesh::Draw() const
 {
-    if (!m_buffersInitialized || VAO == 0) return;
+    if (VAO == 0) return;
     glBindVertexArray(VAO);
     glDrawElements(GL_TRIANGLES, (GLsizei)indices.size(), GL_UNSIGNED_INT, 0);
     glBindVertexArray(0);
@@ -162,5 +159,53 @@ void Mesh::Shutdown()
     if (VBO != 0) glDeleteBuffers(1, &VBO);
     if (VAO != 0) glDeleteVertexArrays(1, &VAO);
     VAO = VBO = EBO = 0;
-    m_buffersInitialized = false;
+}
+
+int Mesh::FindClosestVertexRay(const glm::vec3& rayOrigin, const glm::vec3& rayDirection, float maxDistance)
+{
+    m_selectedVertexIndex = -1;
+    if (indices.size() < 3 || vertices.empty()) return -1;
+
+    float closestDist = std::numeric_limits<float>::max();
+    int closestVertex = -1;
+
+    Ray ray{rayOrigin, rayDirection};
+    for (size_t i = 0; i < indices.size(); i += 3)
+    {
+        unsigned int i0 = indices[i];
+        unsigned int i1 = indices[i + 1];
+        unsigned int i2 = indices[i + 2];
+        const glm::vec3& v0 = vertices[i0].position;
+        const glm::vec3& v1 = vertices[i1].position;
+        const glm::vec3& v2 = vertices[i2].position;
+        float t, u, v;
+        if (RayTriangleIntersect(ray, v0, v1, v2, t, u, v))
+        {
+            if (t < closestDist && t <= maxDistance)
+            {
+                closestDist = t;
+                // Pick closest vertex in triangle
+                float d0 = glm::distance(v0, rayOrigin + rayDirection * t);
+                float d1 = glm::distance(v1, rayOrigin + rayDirection * t);
+                float d2 = glm::distance(v2, rayOrigin + rayDirection * t);
+                if (d0 <= d1 && d0 <= d2) closestVertex = (int)i0;
+                else if (d1 <= d0 && d1 <= d2) closestVertex = (int)i1;
+                else closestVertex = (int)i2;
+            }
+        }
+    }
+    m_selectedVertexIndex = closestVertex;
+    return m_selectedVertexIndex;
+}
+
+void Mesh::DeformSelectedVertex(const glm::vec3& deltaOffset)
+{
+    if (m_selectedVertexIndex < 0 || m_selectedVertexIndex >= (int)vertices.size()) return;
+    vertices[m_selectedVertexIndex].position += deltaOffset;
+    if (VBO != 0)
+    {
+        glBindBuffer(GL_ARRAY_BUFFER, VBO);
+        glBufferSubData(GL_ARRAY_BUFFER, m_selectedVertexIndex * sizeof(Vertex), sizeof(glm::vec3), &vertices[m_selectedVertexIndex].position);
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+    }
 }

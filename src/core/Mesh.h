@@ -3,6 +3,7 @@
 #include <vector>
 #include <string>
 #include <glm/glm.hpp>
+#include "Selection.h"
 
 struct Vertex
 {
@@ -19,6 +20,7 @@ public:
     unsigned int VAO;
     unsigned int VBO;
     unsigned int EBO;
+    int m_selectedVertexIndex;
 
     Mesh();
     ~Mesh();
@@ -28,6 +30,6 @@ public:
     void Draw() const;
     void Shutdown();
 
-private:
-    bool m_buffersInitialized;
+    int FindClosestVertexRay(const glm::vec3& rayOrigin, const glm::vec3& rayDirection, float maxDistance = 100.0f);
+    void DeformSelectedVertex(const glm::vec3& deltaOffset);
 };
