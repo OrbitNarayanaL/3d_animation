@@ -13,6 +13,7 @@ public:
     void Clear();
     void RenderTriangle();
     void Shutdown();
+    Mesh& GetMesh() { return m_mesh; }
 
 private:
     unsigned int m_shaderProgram;

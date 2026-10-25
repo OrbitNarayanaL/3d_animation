@@ -11,7 +11,6 @@ class SlidersPanel(QWidget):
         
         form_layout = QFormLayout()
         
-        # Define parametric sliders
         self.sliders = {}
         params = ["Height", "Weight", "Muscle", "Face Width"]
         
@@ -26,12 +25,11 @@ class SlidersPanel(QWidget):
         self.layout.addLayout(form_layout)
         
     def on_slider_changed(self, param, value):
-        # Convert to 0.0 - 1.0 range and pass to C++ bindings
         weight = value / 100.0
         print(f"{param}: {weight}")
         if self.viewport_panel and hasattr(self.viewport_panel, 'cpp_renderer') and self.viewport_panel.cpp_renderer:
             try:
-                # Try to access mesh if available through renderer
-                pass
+                self.viewport_panel.cpp_renderer.set_blend_shape_weight(param, weight)
+                self.viewport_panel.update()
             except Exception as e:
-                pass
+                print(f"Bridge Error: {e}")

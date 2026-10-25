@@ -51,5 +51,6 @@ PYBIND11_MODULE(renderer, m) {
         .def("initialize", py::overload_cast<const std::string&, const std::string&, const std::string&>(&Renderer::Initialize), py::arg("vertexShaderPath"), py::arg("fragmentShaderPath"), py::arg("objPath") = "")
         .def("clear", &Renderer::Clear)
         .def("render_triangle", &Renderer::RenderTriangle)
-        .def("shutdown", &Renderer::Shutdown);
+        .def("shutdown", &Renderer::Shutdown)
+        .def("set_blend_shape_weight", [](Renderer& self, const std::string& name, float weight) { self.GetMesh().SetBlendShapeWeight(name, weight); });
 }

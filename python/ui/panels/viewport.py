@@ -18,8 +18,11 @@ class ViewportPanel(QOpenGLWidget):
         
     def initializeGL(self):
         if self.cpp_renderer:
-            # Pass our default shader paths to the native compiler
             self.cpp_renderer.initialize("shaders/basic.vert", "shaders/basic.frag")
+            try:
+                mesh = self.cpp_renderer.GetMesh() if hasattr(self.cpp_renderer, 'GetMesh') else None
+            except Exception:
+                pass
             
     def paintGL(self):
         if self.cpp_renderer:
@@ -27,4 +30,4 @@ class ViewportPanel(QOpenGLWidget):
             self.cpp_renderer.render_triangle()
             
     def resizeGL(self, w, h):
-        pass # The C++ viewport wrapper can handle window size logic here later
+        pass
