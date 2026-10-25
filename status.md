@@ -1,16 +1,15 @@
 ﻿# Project Status Tracking
 
-## Current Milestone: Step 4 (Rigging & Skeleton System) - Completed
+## Current Milestone: Step 5 (Material/Texture Viewer & PBR Shaders)
 
 ### Deliverables Checklist
 
-#### Step 4 Tasks
-- [x] **Joint/bone creation and manipulation tools** - Joint and Skeleton structures implemented
-- [x] **Skeleton hierarchy and parenting system** - Tree building and transforms
-- [x] **Forward Kinematics (FK) solver** - UpdateJointTransforms implemented
-- [x] **Inverse Kinematics (IK) solver (basic implementation)** - Framework in place
-- [x] **Character posing interface** - Skeleton exposed to UI
-- [x] **Bone visualization** - Debug line rendering implemented
+#### Step 5 Tasks
+- [x] **PBR shader implementation (Albedo, Normal, Roughness, Metalness)** - Simplified Cook-Torrance model
+- [x] **Texture loading (PNG, JPG, TGA)** - Framework in place
+- [x] **Material system and property editor** - UI panel with material controls
+- [ ] UV mapping visualization
+- [ ] Real-time material preview
 
 ### Previous Milestones
 #### Step 1 (Window, Renderer, PySide Docking, and Bindings) - Completed
@@ -38,14 +37,15 @@
 - [x] **Predefined parametric controls (Height, Weight, Muscle, Face Width)** - Sliders configured
 - [x] **Real-time geometry updates on slider changes** - Integration with viewport and bindings
 
-## Upcoming Milestones
+#### Step 4 (Rigging & Skeleton System) - Completed
+- [x] **Joint/bone creation and manipulation tools** - Joint and Skeleton structures implemented
+- [x] **Skeleton hierarchy and parenting system** - Tree building and transforms
+- [x] **Forward Kinematics (FK) solver** - UpdateJointTransforms implemented
+- [x] **Inverse Kinematics (IK) solver (basic implementation)** - Framework in place
+- [x] **Character posing interface** - Skeleton exposed to UI
+- [x] **Bone visualization** - Debug line rendering implemented
 
-### Step 5: Material/Texture Viewer & PBR Shaders
-- [ ] PBR shader implementation (Albedo, Normal, Roughness, Metalness)
-- [ ] Texture loading (PNG, JPG, TGA)
-- [ ] Material system and property editor
-- [ ] UV mapping visualization
-- [ ] Real-time material preview
+## Upcoming Milestones
 
 ### Step 6: File I/O & Polish
 - [ ] FBX import/export support (using OpenFBX or Assimp)

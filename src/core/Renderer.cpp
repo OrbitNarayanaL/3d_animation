@@ -171,6 +171,14 @@ void Renderer::RenderTriangle()
         }
         glUniformMatrix4fv(location, (GLsizei)boneMatrices.size(), GL_FALSE, glm::value_ptr(boneMatrices[0]));
     }
+    
+    GLint albedoLoc = glGetUniformLocation(m_shaderProgram, "uAlbedoColor");
+    GLint roughLoc = glGetUniformLocation(m_shaderProgram, "uRoughness");
+    GLint metalLoc = glGetUniformLocation(m_shaderProgram, "uMetalness");
+    if (albedoLoc != -1) glUniform3fv(albedoLoc, 1, glm::value_ptr(m_albedoColor));
+    if (roughLoc != -1) glUniform1f(roughLoc, m_roughness);
+    if (metalLoc != -1) glUniform1f(metalLoc, m_metalness);
+    
     m_mesh.Draw();
     glUseProgram(0);
     RenderSkeletonDebug();

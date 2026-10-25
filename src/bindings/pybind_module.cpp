@@ -72,5 +72,8 @@ PYBIND11_MODULE(renderer, m) {
         .def("render_triangle", &Renderer::RenderTriangle)
         .def("shutdown", &Renderer::Shutdown)
         .def("set_blend_shape_weight", [](Renderer& self, const std::string& name, float weight) { self.GetMesh().SetBlendShapeWeight(name, weight); })
+        .def("set_albedo_color", &Renderer::SetAlbedoColor)
+        .def("set_roughness", &Renderer::SetRoughness)
+        .def("set_metalness", &Renderer::SetMetalness)
         .def_property_readonly("skeleton", [](Renderer& self) -> Skeleton& { return self.GetSkeleton(); });
 }

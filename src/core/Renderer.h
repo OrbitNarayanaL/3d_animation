@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include <string>
+#include <glm/glm.hpp>
 #include "Mesh.h"
 #include "Rigging.h"
 
@@ -18,10 +19,18 @@ public:
     Mesh& GetMesh() { return m_mesh; }
     Skeleton& GetSkeleton() { return m_skeleton; }
 
+    void SetAlbedoColor(const glm::vec3& color) { m_albedoColor = color; }
+    void SetRoughness(float r) { m_roughness = r; }
+    void SetMetalness(float m) { m_metalness = m; }
+
 private:
     unsigned int m_shaderProgram;
     Mesh m_mesh;
     Skeleton m_skeleton;
+
+    glm::vec3 m_albedoColor = glm::vec3(0.8f, 0.5f, 0.2f);
+    float m_roughness = 0.5f;
+    float m_metalness = 0.0f;
 
     unsigned int CompileShader(const std::string& source, unsigned int type);
     unsigned int CreateShaderProgram(const std::string& vertexSource, const std::string& fragmentSource);

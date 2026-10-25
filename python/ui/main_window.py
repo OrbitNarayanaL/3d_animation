@@ -1,4 +1,4 @@
-﻿from PySide6.QtWidgets import QMainWindow, QDockWidget, QWidget, QVBoxLayout, QLabel
+﻿from PySide6.QtWidgets import QMainWindow, QDockWidget
 from PySide6.QtCore import Qt
 from .panels.viewport import ViewportPanel
 from .panels.sliders import SlidersPanel
@@ -33,7 +33,7 @@ class MainWindow(QMainWindow):
         # Bottom dock - Materials
         self.materials_dock = QDockWidget("Material/Texture Viewer", self)
         self.materials_dock.setAllowedAreas(Qt.BottomDockWidgetArea)
-        self.materials_panel = MaterialsPanel()
+        self.materials_panel = MaterialsPanel(self, viewport_panel=self.viewport)
         self.materials_dock.setWidget(self.materials_panel)
         self.addDockWidget(Qt.BottomDockWidgetArea, self.materials_dock)
         
