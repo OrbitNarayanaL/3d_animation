@@ -5,71 +5,82 @@ A high-performance desktop-based 3D Character Creation Software application buil
 ## Features
 
 - **High-Performance Rendering**: C++ core with modern OpenGL for real-time 3D visualization using indexed element drawing arrays (`glDrawElements`).
-- **3D Selection Engine**: Implements the high-speed Möller-Trumbull Ray-Triangle Intersection algorithm for precise vertex component selection from screen space.
-- **Dynamic Mesh Sculpting**: Native 3D sculpt brush systems with customizable soft falloff tracking for three distinct editing states:
-  * **Inflate**: Volumetric extrusion pushing vertices outward directly along accumulated local surface normals.
-  * **Smooth**: Multi-neighbor vertex spatial filtering to flatten or reduce geometric sharp noise artifacts.
-  * **Grab**: Linear and quadratic soft-selection screen drag translation matching mouse pointer velocity deltas.
-- **Dynamic GPU Streaming**: High-efficiency VBO updates leveraging optimized sub-resource data writing blocks (`glBufferSubData`) and fully multi-threaded automatic surface normal recalculation engines.
-- **Intuitive UI Layout**: Professional Qt/PySide docking-panel interface for Digital Content Creation (DCC) workspaces.
-- **Scripting & Automation Layer**: Embedded Python API via optimized pybind11 translation structures exposing vertex layouts and rendering parameters.
-- **Parametric Character Customization**: *[In Progress]* Blendshape/morph target interpolation architectures.
-- **Rigging & Skeletons**: *[Upcoming]* Joint hierarchical graphs incorporating Forward/Inverse Kinematics (FK/IK) solvers.
+- **3D Selection Engine**: Implements the Möller-Trumbull Ray-Triangle Intersection algorithm for precise vertex/component selection.
+- **Dynamic Mesh Sculpting**: Native sculpt brushes with soft falloff - **Inflate**, **Smooth**, and **Grab**. Optimized GPU updates via `glBufferSubData`.
+- **Parametric Character Creation**: Blendshape/morph target system with real-time slider controls for Height, Weight, Muscle, Face Width.
+- **Rigging & Skeleton System**: Joint/bone hierarchy with Forward Kinematics (FK), skinning vertex attributes, bone visualization, and Python-exposed skeleton API.
+- **PBR Materials**: Simplified Cook-Torrance shader with Albedo, Roughness, Metalness controls and UV layout debug visualization.
+- **File I/O**: Save/load scene (.scene), export mesh to .OBJ with positions, UVs, normals.
+- **Intuitive UI**: PySide6 docking interface with Viewport, Outliner (skeleton tree), Parametric Sliders, Material Editor, and File menu.
+- **Scripting & Automation**: Python API via pybind11 exposing mesh, renderer, skeleton, and scene I/O.
 
 ## Directory Structure
 
 ```
 3d_animation/
-├── CMakeLists.txt              # Top-level CMake build configuration
-├── README.md                   # Project documentation
-├── status.md                   # Project tracking and milestone status
-├── cmake/                      # Custom CMake modules
-├── deps/                       # External dependencies
-│   └── glad/                   # Custom generated core profile OpenGL function loader
-├── src/                        # C++ source engine codebase
-│   ├── core/                   # Subsystem modules
-│   │   ├── Application.cpp/.h  # App state controller
-│   │   ├── Window.cpp/.h       # GLFW context manager
-│   │   ├── Renderer.cpp/.h     # Element buffer rendering calls
-│   │   ├── Mesh.cpp/.h         # OBJ parser, brush operations, and vertex attributes
-│   │   └── Selection.cpp/.h    # Ray-casting intersection calculations
-│   └── bindings/               # Python translation modules
-│       └── pybind_module.cpp   # pybind11 module bindings mapping core types
-└── python/                     # Frontend and runtime script application paths
-    ├── app.py                  # PySide Application entry loop
-    └── ui/                     # Layout definitions
-        ├── main_window.py      # QMainWindow dock layouts
-        └── panels/             # Panel modules
+├── CMakeLists.txt
+├── README.md
+├── status.md
+├── setup_and_run.ps1        # Automated build and run
+├── deps/glad/               # OpenGL loader
+├── shaders/
+│   ├── basic.vert
+│   └── basic.frag
+├── src/
+│   ├── core/                # C++ engine (Window, Renderer, Mesh, Selection, Rigging, SceneIO)
+│   └── bindings/            # pybind11 module
+├── python/
+│   ├── app.py
+│   ├── api/                 # Built renderer.pyd goes here
+│   └── ui/                  # PySide6 UI (main_window, panels)
+└── thirdparty/              # Dependencies (fetched via CMake)
 ```
 
 ## Prerequisites
 
-### Required Software
-- Microsoft Visual Studio 2022 with Desktop C++ workloads
-- CMake 3.20+
-- Python 3.10+ (with PySide6 and numpy)
-- OpenGL 3.3+ Core Profile graphics drivers
+- **Microsoft Visual Studio 2022** with Desktop C++ workload
+- **CMake 3.20+**
+- **Python 3.10+**
+- **PySide6, numpy** (installed automatically by setup script)
+- **OpenGL 3.3+ Core Profile** compatible GPU
 
-## Build and Run Instructions
+## Quick Start
 
-### 1. Set Up Python Environment
-```bash
-python -m venv venv
-venv\Scripts\activate
-pip install PySide6 numpy
+### Automated (Recommended)
+```powershell
+.\setup_and_run.ps1
 ```
+This will create venv, install deps, configure/build with CMake (VS 2022 x64 Release), and launch the app.
 
-### 2. Configure and Build the Core C++ Binary (.pyd)
-```bash
-mkdir build
-cd build
+### Manual
+```powershell
+# Setup environment
+python -m venv venv
+.\venv\Scripts\activate
+pip install PySide6 numpy
+
+# Build
+mkdir build; cd build
 cmake .. -G "Visual Studio 17 2022" -A x64 -DCMAKE_BUILD_TYPE=Release
 cmake --build . --config Release
-```
-
-### 3. Start the Interactive Sandbox Workspace
-```bash
 cd ..
-venv\Scripts\activate
+
+# Run
 python python/app.py
 ```
+
+## Usage
+
+- **Viewport**: 3D view with triangle fallback or loaded mesh
+- **Outliner**: View skeleton hierarchy
+- **Parametric Controls**: Adjust morph targets (Height/Weight/Muscle/Face Width)
+- **Material/Texture Viewer**: Tweak Albedo/Roughness/Metalness, toggle UV debug view
+- **File Menu**: Save/Load scene (.scene), Export mesh to .OBJ
+- **Sculpting/Selection**: C++ API exposed for selection and brush operations
+
+## Architecture
+
+- **Rendering**: OpenGL 3.3 Core with GLAD, indexed drawing, PBR shader
+- **UI**: PySide6/QDockWidget with QOpenGLWidget viewport
+- **Bindings**: pybind11 exposes C++ classes (Window, Renderer, Mesh, Skeleton, SceneIO)
+- **Data Flow**: Python UI → pybind11 → C++ core → OpenGL
