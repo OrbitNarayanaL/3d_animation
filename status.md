@@ -1,6 +1,6 @@
 ﻿# Project Status Tracking
 
-## Current Milestone: Step 4 (Rigging & Skeleton System)
+## Current Milestone: Step 4 (Rigging & Skeleton System) - Completed
 
 ### Deliverables Checklist
 
@@ -10,7 +10,7 @@
 - [x] **Forward Kinematics (FK) solver** - UpdateJointTransforms implemented
 - [x] **Inverse Kinematics (IK) solver (basic implementation)** - Framework in place
 - [x] **Character posing interface** - Skeleton exposed to UI
-- [ ] Bone visualization
+- [x] **Bone visualization** - Debug line rendering implemented
 
 ### Previous Milestones
 #### Step 1 (Window, Renderer, PySide Docking, and Bindings) - Completed

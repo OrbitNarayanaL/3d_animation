@@ -13,6 +13,7 @@ public:
     bool Initialize(const std::string& vertexShaderPath, const std::string& fragmentShaderPath, const std::string& objPath = "");
     void Clear();
     void RenderTriangle();
+    void RenderSkeletonDebug();
     void Shutdown();
     Mesh& GetMesh() { return m_mesh; }
     Skeleton& GetSkeleton() { return m_skeleton; }

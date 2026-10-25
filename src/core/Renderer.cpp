@@ -112,7 +112,6 @@ bool Renderer::Initialize(const std::string& vertexShaderPath, const std::string
         m_mesh.SetupMeshBuffers();
     }
 
-    // Initialize simple skeleton
     m_skeleton = Skeleton();
     m_skeleton.AddJoint("Root", -1, glm::mat4(1.0f));
     m_skeleton.UpdateJointTransforms(0, glm::mat4(1.0f));
@@ -125,6 +124,37 @@ void Renderer::Clear()
 {
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+}
+
+void Renderer::RenderSkeletonDebug()
+{
+    if (m_skeleton.joints.empty()) return;
+    std::vector<float> lineVerts;
+    for (const auto& joint : m_skeleton.joints)
+    {
+        if (joint.parentIndex >= 0 && joint.parentIndex < (int)m_skeleton.joints.size())
+        {
+            glm::vec3 p1 = glm::vec3(joint.globalTransform[3]);
+            glm::vec3 p2 = glm::vec3(m_skeleton.joints[joint.parentIndex].globalTransform[3]);
+            lineVerts.push_back(p1.x); lineVerts.push_back(p1.y); lineVerts.push_back(p1.z);
+            lineVerts.push_back(p2.x); lineVerts.push_back(p2.y); lineVerts.push_back(p2.z);
+        }
+    }
+    if (lineVerts.empty()) return;
+    
+    GLuint debugVAO, debugVBO;
+    glGenVertexArrays(1, &debugVAO);
+    glGenBuffers(1, &debugVBO);
+    glBindVertexArray(debugVAO);
+    glBindBuffer(GL_ARRAY_BUFFER, debugVBO);
+    glBufferData(GL_ARRAY_BUFFER, lineVerts.size() * sizeof(float), lineVerts.data(), GL_DYNAMIC_DRAW);
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+    glLineWidth(2.0f);
+    glDrawArrays(GL_LINES, 0, (GLsizei)(lineVerts.size() / 3));
+    glBindVertexArray(0);
+    glDeleteBuffers(1, &debugVBO);
+    glDeleteVertexArrays(1, &debugVAO);
 }
 
 void Renderer::RenderTriangle()
@@ -143,6 +173,7 @@ void Renderer::RenderTriangle()
     }
     m_mesh.Draw();
     glUseProgram(0);
+    RenderSkeletonDebug();
 }
 
 void Renderer::Shutdown()
