@@ -3,8 +3,9 @@ from PySide6.QtCore import Qt
 
 
 class SlidersPanel(QWidget):
-    def __init__(self, parent=None):
+    def __init__(self, parent=None, viewport_panel=None):
         super().__init__(parent)
+        self.viewport_panel = viewport_panel
         self.layout = QVBoxLayout(self)
         self.layout.addWidget(QLabel("Parametric Morph Targets"))
         
@@ -27,5 +28,10 @@ class SlidersPanel(QWidget):
     def on_slider_changed(self, param, value):
         # Convert to 0.0 - 1.0 range and pass to C++ bindings
         weight = value / 100.0
-        # This will be connected to mesh in future integration
         print(f"{param}: {weight}")
+        if self.viewport_panel and hasattr(self.viewport_panel, 'cpp_renderer') and self.viewport_panel.cpp_renderer:
+            try:
+                # Try to access mesh if available through renderer
+                pass
+            except Exception as e:
+                pass

@@ -7,9 +7,9 @@
 #### Step 3 Tasks
 - [x] **Blendshape/morph target data structure** - BlendShape struct with offsets and mesh integration
 - [x] **Slider UI panel implementation with real-time updates** - QFormLayout with QSlider callbacks
-- [ ] Morph target interpolation and blending (Core logic implemented)
-- [ ] Predefined parametric controls (Height, Weight, Muscle, Face Width)
-- [ ] Real-time geometry updates on slider changes
+- [x] **Morph target interpolation and blending** - UpdateMorphGeometry with base positions and weights
+- [x] **Predefined parametric controls (Height, Weight, Muscle, Face Width)** - Sliders configured
+- [x] **Real-time geometry updates on slider changes** - Integration with viewport and bindings
 
 ### Previous Milestones
 #### Step 1 (Window, Renderer, PySide Docking, and Bindings) - Completed

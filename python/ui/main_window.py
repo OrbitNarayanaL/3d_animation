@@ -1,6 +1,10 @@
 ﻿from PySide6.QtWidgets import QMainWindow, QDockWidget, QTextEdit, QWidget, QVBoxLayout, QLabel
 from PySide6.QtCore import Qt
 from .panels.viewport import ViewportPanel
+from .panels.sliders import SlidersPanel
+from .panels.outliner import OutlinerPanel
+from .panels.materials import MaterialsPanel
+
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -12,19 +16,23 @@ class MainWindow(QMainWindow):
         self.viewport = ViewportPanel(self)
         self.setCentralWidget(self.viewport)
         
-        # Setup Docking Panels
-        self.create_dock("Parametric Sliders", Qt.LeftDockWidgetArea)
-        self.create_dock("Outliner / Skeleton Hierarchy", Qt.RightDockWidgetArea)
-        self.create_dock("Material & Texture Viewer", Qt.BottomDockWidgetArea)
-        
-    def create_dock(self, title, area):
-        dock = QDockWidget(title, self)
-        dock.setAllowedAreas(Qt.LeftDockWidgetArea | Qt.RightDockWidgetArea | Qt.BottomDockWidgetArea)
-        
-        # Placeholder Inner Widget
-        content = QWidget()
-        layout = QVBoxLayout(content)
-        layout.addWidget(QLabel(f"{title} Control Space Panel"))
-        
-        dock.setWidget(content)
-        self.addDockWidget(area, dock)
+        # Left dock - Outliner
+        self.outliner_dock = QDockWidget("Outliner", self)
+        self.outliner_dock.setAllowedAreas(Qt.LeftDockWidgetArea | Qt.RightDockWidgetArea)
+        self.outliner_panel = OutlinerPanel()
+        self.outliner_dock.setWidget(self.outliner_panel)
+        self.addDockWidget(Qt.LeftDockWidgetArea, self.outliner_dock)
+
+        # Right dock - Sliders (Parametric)
+        self.sliders_dock = QDockWidget("Parametric Controls", self)
+        self.sliders_dock.setAllowedAreas(Qt.LeftDockWidgetArea | Qt.RightDockWidgetArea)
+        self.sliders_panel = SlidersPanel(self, viewport_panel=self.viewport)
+        self.sliders_dock.setWidget(self.sliders_panel)
+        self.addDockWidget(Qt.RightDockWidgetArea, self.sliders_dock)
+
+        # Bottom dock - Materials
+        self.materials_dock = QDockWidget("Material/Texture Viewer", self)
+        self.materials_dock.setAllowedAreas(Qt.BottomDockWidgetArea)
+        self.materials_panel = MaterialsPanel()
+        self.materials_dock.setWidget(self.materials_panel)
+        self.addDockWidget(Qt.BottomDockWidgetArea, self.materials_dock)

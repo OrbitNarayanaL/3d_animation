@@ -1,5 +1,5 @@
 ﻿from PySide6.QtOpenGLWidgets import QOpenGLWidget
-from PySide6.QtCore import Qt, QTimer
+from PySide6.QtCore import Qt
 import sys
 
 # Try loading our compiled native C++ binary module
