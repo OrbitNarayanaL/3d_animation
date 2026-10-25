@@ -7,12 +7,12 @@
 - [x] **1. CMake build (top-level)** - Builds C++ core + pybind11 module
 - [x] **2. `src/core/Window`** - GLFW init, OpenGL context, resize handling
 - [x] **3. `src/core/Renderer`** - VAO/VBO setup, simple shader compilation, clear/draw operations
-- [ ] **4. `src/bindings/pybind_module.cpp`** - pybind11 bindings exposing `Renderer` and `Window` classes
-- [ ] **5. `shaders/basic.*`** - Basic vertex and fragment shaders (Completed)
-- [ ] **6. `python/app.py`** - PySide application bootstrap and entry point
-- [ ] **7. `python/ui/main_window.py`** - QMainWindow with QDockWidget layout (Viewport, Sliders, Outliner, Materials)
-- [ ] **8. `python/ui/panels/viewport.py`** - Viewport panel embedding OpenGL via QOpenGLWidget
-- [ ] **9. `README.md`** - Build/run instructions and project documentation (Completed)
+- [x] **4. `src/bindings/pybind_module.cpp`** - pybind11 bindings exposing `Renderer` and `Window` classes
+- [x] **5. `shaders/basic.*`** - Basic vertex and fragment shaders (Completed)
+- [x] **6. `python/app.py`** - PySide application bootstrap and entry point
+- [x] **7. `python/ui/main_window.py`** - QMainWindow with QDockWidget layout (Viewport, Sliders, Outliner, Materials)
+- [x] **8. `python/ui/panels/viewport.py`** - Viewport panel embedding OpenGL via QOpenGLWidget
+- [x] **9. `README.md`** - Build/run instructions and project documentation (Completed)
 
 ## Architectural Overview
 

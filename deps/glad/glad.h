@@ -21,6 +21,7 @@ extern "C" {
 #define GL_LINK_STATUS 0x8B82
 #define GL_ARRAY_BUFFER 0x8892
 #define GL_STATIC_DRAW 0x88E4
+#define GL_VERSION 0x1F02
 
 typedef unsigned int GLenum;
 typedef unsigned char GLboolean;

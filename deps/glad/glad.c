@@ -1,5 +1,8 @@
 ﻿#include "glad.h"
+
+#ifdef _WIN32
 #include <GLFW/glfw3.h>
+#endif
 
 int gladLoadGLLoader(GLADloadproc load)
 {
@@ -7,7 +10,7 @@ int gladLoadGLLoader(GLADloadproc load)
     return 1;
 }
 
-const unsigned char* glGetString(GLenum name) { (void)name; return (const unsigned char*)"OpenGL 3.3"; }
+const unsigned char* glGetString(GLenum name) { (void)name; return (const unsigned char*)"3.3.0 Core Profile"; }
 void glClearColor(GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha) { (void)red; (void)green; (void)blue; (void)alpha; }
 void glClear(GLbitfield mask) { (void)mask; }
 void glViewport(GLint x, GLint y, GLsizei width, GLsizei height) { (void)x; (void)y; (void)width; (void)height; }
