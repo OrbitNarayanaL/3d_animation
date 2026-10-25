@@ -1,4 +1,5 @@
 ﻿#include "Rigging.h"
+#include <glm/gtc/matrix_inverse.hpp>
 
 Skeleton::Skeleton()
 {
@@ -30,5 +31,13 @@ void Skeleton::UpdateJointTransforms(int jointIndex, const glm::mat4& parentTran
         {
             UpdateJointTransforms((int)i, joints[jointIndex].globalTransform);
         }
+    }
+}
+
+void Skeleton::ComputeInverseBindMatrices()
+{
+    for (auto& joint : joints)
+    {
+        joint.inverseBindTransform = glm::inverse(joint.globalTransform);
     }
 }

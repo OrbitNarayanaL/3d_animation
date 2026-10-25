@@ -25,4 +25,5 @@ public:
 
     void UpdateJointTransforms(int jointIndex = 0, const glm::mat4& parentTransform = glm::mat4(1.0f));
     void AddJoint(const std::string& name, int parentIndex, const glm::mat4& localTransform);
+    void ComputeInverseBindMatrices();
 };

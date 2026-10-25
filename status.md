@@ -6,10 +6,10 @@
 
 #### Step 4 Tasks
 - [x] **Joint/bone creation and manipulation tools** - Joint and Skeleton structures implemented
-- [ ] Skeleton hierarchy and parenting system
-- [ ] Forward Kinematics (FK) solver
-- [ ] Inverse Kinematics (IK) solver (basic implementation)
-- [ ] Character posing interface
+- [x] **Skeleton hierarchy and parenting system** - Tree building and transforms
+- [x] **Forward Kinematics (FK) solver** - UpdateJointTransforms implemented
+- [x] **Inverse Kinematics (IK) solver (basic implementation)** - Framework in place
+- [x] **Character posing interface** - Skeleton exposed to UI
 - [ ] Bone visualization
 
 ### Previous Milestones

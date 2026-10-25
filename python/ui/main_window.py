@@ -1,4 +1,4 @@
-﻿from PySide6.QtWidgets import QMainWindow, QDockWidget, QTextEdit, QWidget, QVBoxLayout, QLabel
+﻿from PySide6.QtWidgets import QMainWindow, QDockWidget, QWidget, QVBoxLayout, QLabel
 from PySide6.QtCore import Qt
 from .panels.viewport import ViewportPanel
 from .panels.sliders import SlidersPanel
@@ -36,3 +36,11 @@ class MainWindow(QMainWindow):
         self.materials_panel = MaterialsPanel()
         self.materials_dock.setWidget(self.materials_panel)
         self.addDockWidget(Qt.BottomDockWidgetArea, self.materials_dock)
+        
+        # Try to populate skeleton if available
+        try:
+            if hasattr(self.viewport, 'cpp_renderer') and self.viewport.cpp_renderer:
+                skel = self.viewport.cpp_renderer.skeleton
+                self.outliner_panel.populate_skeleton(skel)
+        except Exception as e:
+            print(f"Outliner init error: {e}")

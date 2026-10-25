@@ -33,7 +33,8 @@ PYBIND11_MODULE(renderer, m) {
         .def(py::init<>())
         .def_readwrite("joints", &Skeleton::joints)
         .def("update_joint_transforms", &Skeleton::UpdateJointTransforms)
-        .def("add_joint", &Skeleton::AddJoint);
+        .def("add_joint", &Skeleton::AddJoint)
+        .def("compute_inverse_bind_matrices", &Skeleton::ComputeInverseBindMatrices);
 
     py::class_<BlendShape>(m, "BlendShape")
         .def(py::init<>())
@@ -70,5 +71,6 @@ PYBIND11_MODULE(renderer, m) {
         .def("clear", &Renderer::Clear)
         .def("render_triangle", &Renderer::RenderTriangle)
         .def("shutdown", &Renderer::Shutdown)
-        .def("set_blend_shape_weight", [](Renderer& self, const std::string& name, float weight) { self.GetMesh().SetBlendShapeWeight(name, weight); });
+        .def("set_blend_shape_weight", [](Renderer& self, const std::string& name, float weight) { self.GetMesh().SetBlendShapeWeight(name, weight); })
+        .def_property_readonly("skeleton", [](Renderer& self) -> Skeleton& { return self.GetSkeleton(); });
 }

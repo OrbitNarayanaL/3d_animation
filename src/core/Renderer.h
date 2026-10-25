@@ -2,6 +2,7 @@
 
 #include <string>
 #include "Mesh.h"
+#include "Rigging.h"
 
 class Renderer
 {
@@ -14,10 +15,12 @@ public:
     void RenderTriangle();
     void Shutdown();
     Mesh& GetMesh() { return m_mesh; }
+    Skeleton& GetSkeleton() { return m_skeleton; }
 
 private:
     unsigned int m_shaderProgram;
     Mesh m_mesh;
+    Skeleton m_skeleton;
 
     unsigned int CompileShader(const std::string& source, unsigned int type);
     unsigned int CreateShaderProgram(const std::string& vertexSource, const std::string& fragmentSource);
