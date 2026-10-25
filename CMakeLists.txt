@@ -47,15 +47,20 @@ add_library(core
     src/core/Renderer.h
     src/core/Application.cpp
     src/core/Application.h
+    src/core/Mesh.cpp
+    src/core/Mesh.h
+    deps/glad/glad.c
+    deps/glad/glad.h
 )
 
 target_include_directories(core PUBLIC
     ${CMAKE_SOURCE_DIR}/src
     ${CMAKE_SOURCE_DIR}/thirdparty
     ${CMAKE_SOURCE_DIR}/deps
+    ${glm_SOURCE_DIR}
 )
 
-target_link_libraries(core PUBLIC glfw glm)
+target_link_libraries(core PUBLIC glfw glm OpenGL::GL)
 
 # Find OpenGL
 find_package(OpenGL REQUIRED)

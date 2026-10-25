@@ -5,7 +5,7 @@
 #include <iostream>
 
 Renderer::Renderer()
-    : m_shaderProgram(0), m_VAO(0), m_VBO(0)
+    : m_shaderProgram(0)
 {
 }
 
@@ -73,7 +73,7 @@ unsigned int Renderer::CreateShaderProgram(const std::string& vertexSource, cons
     return program;
 }
 
-bool Renderer::Initialize(const std::string& vertexShaderPath, const std::string& fragmentShaderPath)
+bool Renderer::Initialize(const std::string& vertexShaderPath, const std::string& fragmentShaderPath, const std::string& objPath)
 {
     std::string vertexSource = LoadShaderSource(vertexShaderPath);
     std::string fragmentSource = LoadShaderSource(fragmentShaderPath);
@@ -81,24 +81,29 @@ bool Renderer::Initialize(const std::string& vertexShaderPath, const std::string
     if (m_shaderProgram == 0)
         return false;
 
-    float vertices[] = {
-        -0.5f, -0.5f, 0.0f,
-         0.5f, -0.5f, 0.0f,
-         0.0f,  0.5f, 0.0f
-    };
-
-    glGenVertexArrays(1, &m_VAO);
-    glGenBuffers(1, &m_VBO);
-
-    glBindVertexArray(m_VAO);
-    glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-    glEnableVertexAttribArray(0);
-
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindVertexArray(0);
+    if (!objPath.empty())
+    {
+        m_mesh.LoadOBJ(objPath);
+    }
+    else
+    {
+        // Fallback: create a simple triangle if no OBJ provided
+        m_mesh.vertices.clear();
+        m_mesh.indices.clear();
+        Vertex v1, v2, v3;
+        v1.position = glm::vec3(-0.5f, -0.5f, 0.0f);
+        v2.position = glm::vec3(0.5f, -0.5f, 0.0f);
+        v3.position = glm::vec3(0.0f, 0.5f, 0.0f);
+        v1.normal = v2.normal = v3.normal = glm::vec3(0.0f, 0.0f, 1.0f);
+        v1.texCoords = v2.texCoords = v3.texCoords = glm::vec2(0.0f);
+        m_mesh.vertices.push_back(v1);
+        m_mesh.vertices.push_back(v2);
+        m_mesh.vertices.push_back(v3);
+        m_mesh.indices.push_back(0);
+        m_mesh.indices.push_back(1);
+        m_mesh.indices.push_back(2);
+        m_mesh.SetupMeshBuffers();
+    }
 
     return true;
 }
@@ -112,16 +117,13 @@ void Renderer::Clear()
 void Renderer::RenderTriangle()
 {
     glUseProgram(m_shaderProgram);
-    glBindVertexArray(m_VAO);
-    glDrawArrays(GL_TRIANGLES, 0, 3);
-    glBindVertexArray(0);
+    m_mesh.Draw();
     glUseProgram(0);
 }
 
 void Renderer::Shutdown()
 {
-    if (m_VBO != 0) glDeleteBuffers(1, &m_VBO);
-    if (m_VAO != 0) glDeleteVertexArrays(1, &m_VAO);
+    m_mesh.Shutdown();
     if (m_shaderProgram != 0) glDeleteProgram(m_shaderProgram);
-    m_VBO = m_VAO = m_shaderProgram = 0;
+    m_shaderProgram = 0;
 }

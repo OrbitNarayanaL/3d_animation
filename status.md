@@ -1,9 +1,18 @@
 ﻿# Project Status Tracking
 
-## Current Milestone: Step 1 (Window, Renderer, PySide Docking, and Bindings)
+## Current Milestone: Step 2 (Mesh Loading & Manipulation)
 
 ### Deliverables Checklist
 
+#### Step 2 Tasks
+- [x] **OBJ mesh import functionality** - Mesh data structure with LoadOBJ parser implemented
+- [ ] Vertex, edge, and face selection system
+- [ ] Basic mesh deformation framework
+- [ ] Sculpting brush implementation (Smooth, Grab, Inflate)
+- [ ] Mesh data structures and GPU buffer management (Enhanced)
+
+### Previous Milestones
+#### Step 1 (Window, Renderer, PySide Docking, and Bindings) - Completed
 - [x] **1. CMake build (top-level)** - Builds C++ core + pybind11 module
 - [x] **2. `src/core/Window`** - GLFW init, OpenGL context, resize handling
 - [x] **3. `src/core/Renderer`** - VAO/VBO setup, simple shader compilation, clear/draw operations
@@ -41,13 +50,6 @@ The 3D viewport is implemented using **QOpenGLWidget** which wraps and manages t
 - **Resource Sharing**: Allows efficient sharing of OpenGL resources between the C++ engine and Qt's rendering infrastructure
 
 ## Upcoming Milestones
-
-### Step 2: Mesh Loading & Manipulation
-- [ ] OBJ mesh import functionality
-- [ ] Vertex, edge, and face selection system
-- [ ] Basic mesh deformation framework
-- [ ] Sculpting brush implementation (Smooth, Grab, Inflate)
-- [ ] Mesh data structures and GPU buffer management
 
 ### Step 3: Parametric Slider System & Blendshapes
 - [ ] Blendshape/morph target data structure
