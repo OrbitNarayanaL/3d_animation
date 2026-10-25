@@ -75,5 +75,6 @@ PYBIND11_MODULE(renderer, m) {
         .def("set_albedo_color", &Renderer::SetAlbedoColor)
         .def("set_roughness", &Renderer::SetRoughness)
         .def("set_metalness", &Renderer::SetMetalness)
+        .def("set_visualize_uv", &Renderer::SetVisualizeUV)
         .def_property_readonly("skeleton", [](Renderer& self) -> Skeleton& { return self.GetSkeleton(); });
 }

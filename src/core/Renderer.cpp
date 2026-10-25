@@ -96,7 +96,9 @@ bool Renderer::Initialize(const std::string& vertexShaderPath, const std::string
         v2.position = glm::vec3(0.5f, -0.5f, 0.0f);
         v3.position = glm::vec3(0.0f, 0.5f, 0.0f);
         v1.normal = v2.normal = v3.normal = glm::vec3(0.0f, 0.0f, 1.0f);
-        v1.texCoords = v2.texCoords = v3.texCoords = glm::vec2(0.0f);
+        v1.texCoords = glm::vec2(0.0f, 0.0f);
+        v2.texCoords = glm::vec2(1.0f, 0.0f);
+        v3.texCoords = glm::vec2(0.5f, 1.0f);
         v1.boneIds = glm::ivec4(0);
         v1.boneWeights = glm::vec4(1.0f);
         v2.boneIds = glm::ivec4(0);
@@ -175,9 +177,11 @@ void Renderer::RenderTriangle()
     GLint albedoLoc = glGetUniformLocation(m_shaderProgram, "uAlbedoColor");
     GLint roughLoc = glGetUniformLocation(m_shaderProgram, "uRoughness");
     GLint metalLoc = glGetUniformLocation(m_shaderProgram, "uMetalness");
+    GLint uvLoc = glGetUniformLocation(m_shaderProgram, "uVisualizeUV");
     if (albedoLoc != -1) glUniform3fv(albedoLoc, 1, glm::value_ptr(m_albedoColor));
     if (roughLoc != -1) glUniform1f(roughLoc, m_roughness);
-    if (metalLoc != -1) glUniform1f(metalLoc, m_metalness);
+    if (metalLoc != -1) glUniform1f(m_metalness);
+    if (uvLoc != -1) glUniform1i(uvLoc, m_visualizeUV);
     
     m_mesh.Draw();
     glUseProgram(0);

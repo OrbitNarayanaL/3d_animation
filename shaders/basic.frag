@@ -2,20 +2,27 @@
 
 out vec4 FragColor;
 
+in vec2 vTexCoords;
+
 uniform vec3 uAlbedoColor;
 uniform float uRoughness;
 uniform float uMetalness;
+uniform int uVisualizeUV;
 
 void main()
 {
+    if (uVisualizeUV == 1)
+    {
+        FragColor = vec4(vTexCoords.x, vTexCoords.y, 0.0, 1.0);
+        return;
+    }
+
     vec3 lightDir = normalize(vec3(1.0, 1.0, 1.0));
     vec3 normal = normalize(vec3(0.0, 0.0, 1.0));
     float NdotL = max(dot(normal, lightDir), 0.0);
     
-    // Lambertian diffuse
     vec3 diffuse = uAlbedoColor * NdotL;
     
-    // Simplified specular (Cook-Torrance approximation)
     vec3 viewDir = normalize(vec3(0.0, 0.0, 1.0));
     vec3 halfVec = normalize(lightDir + viewDir);
     float NdotH = max(dot(normal, halfVec), 0.0);

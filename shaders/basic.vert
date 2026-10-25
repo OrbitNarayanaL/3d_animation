@@ -8,6 +8,8 @@ layout (location = 4) in vec4 aBoneWeights;
 
 uniform mat4 uBoneTransforms[100];
 
+out vec2 vTexCoords;
+
 void main()
 {
     mat4 boneTransform = mat4(1.0);
@@ -21,5 +23,6 @@ void main()
         boneTransform += uBoneTransforms[aBoneIds.w] * aBoneWeights.w;
     if (aBoneWeights.x == 0.0 && aBoneWeights.y == 0.0 && aBoneWeights.z == 0.0 && aBoneWeights.w == 0.0)
         boneTransform = mat4(1.0);
+    vTexCoords = aTexCoords;
     gl_Position = boneTransform * vec4(aPos, 1.0);
 }

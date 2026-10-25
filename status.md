@@ -1,6 +1,6 @@
 ﻿# Project Status Tracking
 
-## Current Milestone: Step 5 (Material/Texture Viewer & PBR Shaders)
+## Current Milestone: Step 5 (Material/Texture Viewer & PBR Shaders) - Completed
 
 ### Deliverables Checklist
 
@@ -8,8 +8,8 @@
 - [x] **PBR shader implementation (Albedo, Normal, Roughness, Metalness)** - Simplified Cook-Torrance model
 - [x] **Texture loading (PNG, JPG, TGA)** - Framework in place
 - [x] **Material system and property editor** - UI panel with material controls
-- [ ] UV mapping visualization
-- [ ] Real-time material preview
+- [x] **UV mapping visualization** - UV debug view toggle implemented
+- [x] **Real-time material preview** - Live updates via slider controls
 
 ### Previous Milestones
 #### Step 1 (Window, Renderer, PySide Docking, and Bindings) - Completed

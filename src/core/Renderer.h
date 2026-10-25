@@ -22,6 +22,7 @@ public:
     void SetAlbedoColor(const glm::vec3& color) { m_albedoColor = color; }
     void SetRoughness(float r) { m_roughness = r; }
     void SetMetalness(float m) { m_metalness = m; }
+    void SetVisualizeUV(int value) { m_visualizeUV = value; }
 
 private:
     unsigned int m_shaderProgram;
@@ -31,6 +32,7 @@ private:
     glm::vec3 m_albedoColor = glm::vec3(0.8f, 0.5f, 0.2f);
     float m_roughness = 0.5f;
     float m_metalness = 0.0f;
+    int m_visualizeUV = 0;
 
     unsigned int CompileShader(const std::string& source, unsigned int type);
     unsigned int CreateShaderProgram(const std::string& vertexSource, const std::string& fragmentSource);
