@@ -53,6 +53,8 @@ add_library(core
     src/core/Selection.h
     src/core/Rigging.cpp
     src/core/Rigging.h
+    src/core/SceneIO.cpp
+    src/core/SceneIO.h
     deps/glad/glad.c
     deps/glad/glad.h
 )

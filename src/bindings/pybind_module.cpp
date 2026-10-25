@@ -6,6 +6,7 @@
 #include "../core/Renderer.h"
 #include "../core/Mesh.h"
 #include "../core/Rigging.h"
+#include "../core/SceneIO.h"
 
 namespace py = pybind11;
 
@@ -76,5 +77,10 @@ PYBIND11_MODULE(renderer, m) {
         .def("set_roughness", &Renderer::SetRoughness)
         .def("set_metalness", &Renderer::SetMetalness)
         .def("set_visualize_uv", &Renderer::SetVisualizeUV)
-        .def_property_readonly("skeleton", [](Renderer& self) -> Skeleton& { return self.GetSkeleton(); });
+        .def_property_readonly("skeleton", [](Renderer& self) -> Skeleton& { return self.GetSkeleton(); })
+        .def_property_readonly("mesh", [](Renderer& self) -> Mesh& { return self.GetMesh(); });
+
+    m.def("save_scene", &SceneIO::SaveScene);
+    m.def("load_scene", &SceneIO::LoadScene);
+    m.def("export_mesh_to_obj", &SceneIO::ExportMeshToOBJ);
 }
