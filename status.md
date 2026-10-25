@@ -1,15 +1,16 @@
 ﻿# Project Status Tracking
 
-## Current Milestone: Step 3 (Parametric Slider System & Blendshapes)
+## Current Milestone: Step 4 (Rigging & Skeleton System)
 
 ### Deliverables Checklist
 
-#### Step 3 Tasks
-- [x] **Blendshape/morph target data structure** - BlendShape struct with offsets and mesh integration
-- [x] **Slider UI panel implementation with real-time updates** - QFormLayout with QSlider callbacks
-- [x] **Morph target interpolation and blending** - UpdateMorphGeometry with base positions and weights
-- [x] **Predefined parametric controls (Height, Weight, Muscle, Face Width)** - Sliders configured
-- [x] **Real-time geometry updates on slider changes** - Integration with viewport and bindings
+#### Step 4 Tasks
+- [x] **Joint/bone creation and manipulation tools** - Joint and Skeleton structures implemented
+- [ ] Skeleton hierarchy and parenting system
+- [ ] Forward Kinematics (FK) solver
+- [ ] Inverse Kinematics (IK) solver (basic implementation)
+- [ ] Character posing interface
+- [ ] Bone visualization
 
 ### Previous Milestones
 #### Step 1 (Window, Renderer, PySide Docking, and Bindings) - Completed
@@ -30,15 +31,14 @@
 - [x] **Sculpting brush implementation (Smooth, Grab, Inflate)** - ApplySculptBrush with falloff and normal recalc
 - [x] **Mesh data structures and GPU buffer management (Enhanced)** - Optimized glBufferSubData updates
 
-## Upcoming Milestones
+#### Step 3 (Parametric Slider System & Blendshapes) - Completed
+- [x] **Blendshape/morph target data structure** - BlendShape struct with offsets and mesh integration
+- [x] **Slider UI panel implementation with real-time updates** - QFormLayout with QSlider callbacks
+- [x] **Morph target interpolation and blending** - UpdateMorphGeometry with base positions and weights
+- [x] **Predefined parametric controls (Height, Weight, Muscle, Face Width)** - Sliders configured
+- [x] **Real-time geometry updates on slider changes** - Integration with viewport and bindings
 
-### Step 4: Rigging & Skeleton System
-- [ ] Joint/bone creation and manipulation tools
-- [ ] Skeleton hierarchy and parenting system
-- [ ] Forward Kinematics (FK) solver
-- [ ] Inverse Kinematics (IK) solver (basic implementation)
-- [ ] Character posing interface
-- [ ] Bone visualization
+## Upcoming Milestones
 
 ### Step 5: Material/Texture Viewer & PBR Shaders
 - [ ] PBR shader implementation (Albedo, Normal, Roughness, Metalness)

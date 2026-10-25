@@ -5,6 +5,7 @@
 #include "../core/Window.h"
 #include "../core/Renderer.h"
 #include "../core/Mesh.h"
+#include "../core/Rigging.h"
 
 namespace py = pybind11;
 
@@ -15,7 +16,24 @@ PYBIND11_MODULE(renderer, m) {
         .def(py::init<>())
         .def_readwrite("position", &Vertex::position)
         .def_readwrite("normal", &Vertex::normal)
-        .def_readwrite("texCoords", &Vertex::texCoords);
+        .def_readwrite("texCoords", &Vertex::texCoords)
+        .def_readwrite("boneIds", &Vertex::boneIds)
+        .def_readwrite("boneWeights", &Vertex::boneWeights);
+
+    py::class_<Joint>(m, "Joint")
+        .def(py::init<>())
+        .def_readwrite("name", &Joint::name)
+        .def_readwrite("index", &Joint::index)
+        .def_readwrite("parentIndex", &Joint::parentIndex)
+        .def_readwrite("localTransform", &Joint::localTransform)
+        .def_readwrite("inverseBindTransform", &Joint::inverseBindTransform)
+        .def_readwrite("globalTransform", &Joint::globalTransform);
+
+    py::class_<Skeleton>(m, "Skeleton")
+        .def(py::init<>())
+        .def_readwrite("joints", &Skeleton::joints)
+        .def("update_joint_transforms", &Skeleton::UpdateJointTransforms)
+        .def("add_joint", &Skeleton::AddJoint);
 
     py::class_<BlendShape>(m, "BlendShape")
         .def(py::init<>())

@@ -100,6 +100,8 @@ bool Mesh::LoadOBJ(const std::string& filePath)
         {
             auto [pIdx, tIdx, nIdx] = faces[i + j];
             Vertex vert;
+            vert.boneIds = glm::ivec4(-1);
+            vert.boneWeights = glm::vec4(0.0f);
             if (pIdx > 0 && pIdx <= (int)positions.size())
                 vert.position = positions[pIdx - 1];
             else
@@ -147,6 +149,10 @@ void Mesh::SetupMeshBuffers()
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, normal));
     glEnableVertexAttribArray(2);
     glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, texCoords));
+    glEnableVertexAttribArray(3);
+    glVertexAttribIPointer(3, 4, GL_INT, sizeof(Vertex), (void*)offsetof(Vertex, boneIds));
+    glEnableVertexAttribArray(4);
+    glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, boneWeights));
 
     glBindVertexArray(0);
 }
@@ -295,10 +301,6 @@ void Mesh::AddBlendShape(const std::string& name, const std::vector<glm::vec3>& 
     BlendShape bs;
     bs.name = name;
     bs.offsets = offsets;
-    if (bs.offsets.size() != vertices.size() && !m_basePositions.empty() && bs.offsets.size() == m_basePositions.size())
-    {
-        // keep as is
-    }
     m_blendShapes.push_back(bs);
     m_shapeWeights[name] = 0.0f;
 }

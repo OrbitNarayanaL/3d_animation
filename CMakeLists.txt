@@ -51,6 +51,8 @@ add_library(core
     src/core/Mesh.h
     src/core/Selection.cpp
     src/core/Selection.h
+    src/core/Rigging.cpp
+    src/core/Rigging.h
     deps/glad/glad.c
     deps/glad/glad.h
 )
