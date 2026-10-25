@@ -32,4 +32,6 @@ public:
 
     int FindClosestVertexRay(const glm::vec3& rayOrigin, const glm::vec3& rayDirection, float maxDistance = 100.0f);
     void DeformSelectedVertex(const glm::vec3& deltaOffset);
+    void ApplySculptBrush(const glm::vec3& brushCenter, float radius, float strength, const std::string& brushType, const glm::vec3& mouseDragDelta = glm::vec3(0.0f));
+    void RecalculateNormals();
 };
