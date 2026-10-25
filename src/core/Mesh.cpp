@@ -117,6 +117,10 @@ bool Mesh::LoadOBJ(const std::string& filePath)
         }
     }
 
+    m_basePositions.clear();
+    for (const auto& v : vertices)
+        m_basePositions.push_back(v.position);
+
     SetupMeshBuffers();
     return true;
 }
@@ -220,7 +224,7 @@ void Mesh::ApplySculptBrush(const glm::vec3& brushCenter, float radius, float st
         float dist = glm::distance(vertices[i].position, brushCenter);
         if (dist > radius) continue;
         float falloff = 1.0f - (dist / radius);
-        falloff = falloff * falloff; // quadratic falloff
+        falloff = falloff * falloff;
 
         if (brushType == "Inflate")
         {
@@ -230,7 +234,6 @@ void Mesh::ApplySculptBrush(const glm::vec3& brushCenter, float radius, float st
         }
         else if (brushType == "Smooth")
         {
-            // Simple smoothing: average with neighbors approximation
             glm::vec3 avg = vertices[i].position;
             int count = 1;
             for (size_t j = 0; j < vertices.size() && count < 8; ++j)
@@ -284,5 +287,54 @@ void Mesh::RecalculateNormals()
     {
         if (glm::length(normalsAccum[i]) > 0.0001f)
             vertices[i].normal = glm::normalize(normalsAccum[i]);
+    }
+}
+
+void Mesh::AddBlendShape(const std::string& name, const std::vector<glm::vec3>& offsets)
+{
+    BlendShape bs;
+    bs.name = name;
+    bs.offsets = offsets;
+    if (bs.offsets.size() != vertices.size() && !m_basePositions.empty() && bs.offsets.size() == m_basePositions.size())
+    {
+        // keep as is
+    }
+    m_blendShapes.push_back(bs);
+    m_shapeWeights[name] = 0.0f;
+}
+
+void Mesh::SetBlendShapeWeight(const std::string& name, float weight)
+{
+    m_shapeWeights[name] = weight;
+    UpdateMorphGeometry();
+}
+
+void Mesh::UpdateMorphGeometry()
+{
+    if (m_basePositions.empty() || vertices.empty()) return;
+    size_t count = std::min(m_basePositions.size(), vertices.size());
+
+    for (size_t i = 0; i < count; ++i)
+    {
+        glm::vec3 result = m_basePositions[i];
+        for (const auto& bs : m_blendShapes)
+        {
+            auto it = m_shapeWeights.find(bs.name);
+            float w = 0.0f;
+            if (it != m_shapeWeights.end()) w = it->second;
+            if (w == 0.0f) continue;
+            if (i < bs.offsets.size())
+                result += bs.offsets[i] * w;
+        }
+        vertices[i].position = result;
+    }
+
+    RecalculateNormals();
+
+    if (VBO != 0)
+    {
+        glBindBuffer(GL_ARRAY_BUFFER, VBO);
+        glBufferSubData(GL_ARRAY_BUFFER, 0, vertices.size() * sizeof(Vertex), vertices.data());
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
     }
 }

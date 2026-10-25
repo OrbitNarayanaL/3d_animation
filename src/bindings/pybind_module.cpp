@@ -17,6 +17,11 @@ PYBIND11_MODULE(renderer, m) {
         .def_readwrite("normal", &Vertex::normal)
         .def_readwrite("texCoords", &Vertex::texCoords);
 
+    py::class_<BlendShape>(m, "BlendShape")
+        .def(py::init<>())
+        .def_readwrite("name", &BlendShape::name)
+        .def_readwrite("offsets", &BlendShape::offsets);
+
     py::class_<Mesh>(m, "Mesh")
         .def(py::init<>())
         .def_readonly("vertices", &Mesh::vertices)
@@ -28,7 +33,10 @@ PYBIND11_MODULE(renderer, m) {
         .def("find_closest_vertex_ray", &Mesh::FindClosestVertexRay)
         .def("deform_selected_vertex", &Mesh::DeformSelectedVertex)
         .def("apply_sculpt_brush", &Mesh::ApplySculptBrush)
-        .def("recalculate_normals", &Mesh::RecalculateNormals);
+        .def("recalculate_normals", &Mesh::RecalculateNormals)
+        .def("add_blend_shape", &Mesh::AddBlendShape)
+        .def("set_blend_shape_weight", &Mesh::SetBlendShapeWeight)
+        .def("update_morph_geometry", &Mesh::UpdateMorphGeometry);
 
     py::class_<Window>(m, "Window")
         .def(py::init<>())
