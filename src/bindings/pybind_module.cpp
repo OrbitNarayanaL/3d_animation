@@ -26,7 +26,9 @@ PYBIND11_MODULE(renderer, m) {
         .def("setup_mesh_buffers", &Mesh::SetupMeshBuffers)
         .def("shutdown", &Mesh::Shutdown)
         .def("find_closest_vertex_ray", &Mesh::FindClosestVertexRay)
-        .def("deform_selected_vertex", &Mesh::DeformSelectedVertex);
+        .def("deform_selected_vertex", &Mesh::DeformSelectedVertex)
+        .def("apply_sculpt_brush", &Mesh::ApplySculptBrush)
+        .def("recalculate_normals", &Mesh::RecalculateNormals);
 
     py::class_<Window>(m, "Window")
         .def(py::init<>())

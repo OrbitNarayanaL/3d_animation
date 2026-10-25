@@ -6,7 +6,9 @@
 #include <map>
 #include <tuple>
 #include <limits>
+#include <algorithm>
 #include <glm/glm.hpp>
+#include <cmath>
 
 Mesh::Mesh() : VAO(0), VBO(0), EBO(0), m_selectedVertexIndex(-1)
 {
@@ -184,7 +186,6 @@ int Mesh::FindClosestVertexRay(const glm::vec3& rayOrigin, const glm::vec3& rayD
             if (t < closestDist && t <= maxDistance)
             {
                 closestDist = t;
-                // Pick closest vertex in triangle
                 float d0 = glm::distance(v0, rayOrigin + rayDirection * t);
                 float d1 = glm::distance(v1, rayOrigin + rayDirection * t);
                 float d2 = glm::distance(v2, rayOrigin + rayDirection * t);
@@ -207,5 +208,81 @@ void Mesh::DeformSelectedVertex(const glm::vec3& deltaOffset)
         glBindBuffer(GL_ARRAY_BUFFER, VBO);
         glBufferSubData(GL_ARRAY_BUFFER, m_selectedVertexIndex * sizeof(Vertex), sizeof(glm::vec3), &vertices[m_selectedVertexIndex].position);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
+    }
+}
+
+void Mesh::ApplySculptBrush(const glm::vec3& brushCenter, float radius, float strength, const std::string& brushType, const glm::vec3& mouseDragDelta)
+{
+    if (vertices.empty() || radius <= 0.0f) return;
+
+    for (size_t i = 0; i < vertices.size(); ++i)
+    {
+        float dist = glm::distance(vertices[i].position, brushCenter);
+        if (dist > radius) continue;
+        float falloff = 1.0f - (dist / radius);
+        falloff = falloff * falloff; // quadratic falloff
+
+        if (brushType == "Inflate")
+        {
+            glm::vec3 normal = vertices[i].normal;
+            if (glm::length(normal) < 0.0001f) normal = glm::vec3(0.0f, 0.0f, 1.0f);
+            vertices[i].position += glm::normalize(normal) * strength * falloff;
+        }
+        else if (brushType == "Smooth")
+        {
+            // Simple smoothing: average with neighbors approximation
+            glm::vec3 avg = vertices[i].position;
+            int count = 1;
+            for (size_t j = 0; j < vertices.size() && count < 8; ++j)
+            {
+                if (i == j) continue;
+                if (glm::distance(vertices[i].position, vertices[j].position) < radius * 0.3f)
+                {
+                    avg += vertices[j].position;
+                    count++;
+                }
+            }
+            avg /= (float)count;
+            vertices[i].position = glm::mix(vertices[i].position, avg, strength * falloff * 0.5f);
+        }
+        else if (brushType == "Grab")
+        {
+            vertices[i].position += mouseDragDelta * strength * falloff;
+        }
+    }
+
+    RecalculateNormals();
+
+    if (VBO != 0)
+    {
+        glBindBuffer(GL_ARRAY_BUFFER, VBO);
+        glBufferSubData(GL_ARRAY_BUFFER, 0, vertices.size() * sizeof(Vertex), vertices.data());
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+    }
+}
+
+void Mesh::RecalculateNormals()
+{
+    if (indices.empty() || vertices.empty()) return;
+
+    std::vector<glm::vec3> normalsAccum(vertices.size(), glm::vec3(0.0f));
+
+    for (size_t i = 0; i < indices.size(); i += 3)
+    {
+        unsigned int i0 = indices[i];
+        unsigned int i1 = indices[i + 1];
+        unsigned int i2 = indices[i + 2];
+        glm::vec3 edge1 = vertices[i1].position - vertices[i0].position;
+        glm::vec3 edge2 = vertices[i2].position - vertices[i0].position;
+        glm::vec3 faceNormal = glm::cross(edge1, edge2);
+        normalsAccum[i0] += faceNormal;
+        normalsAccum[i1] += faceNormal;
+        normalsAccum[i2] += faceNormal;
+    }
+
+    for (size_t i = 0; i < vertices.size(); ++i)
+    {
+        if (glm::length(normalsAccum[i]) > 0.0001f)
+            vertices[i].normal = glm::normalize(normalsAccum[i]);
     }
 }

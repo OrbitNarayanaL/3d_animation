@@ -8,8 +8,8 @@
 - [x] **OBJ mesh import functionality** - Mesh data structure with LoadOBJ parser implemented
 - [x] **Vertex, edge, and face selection system** - Ray-triangle intersection with vertex selection implemented
 - [x] **Basic mesh deformation framework** - DeformSelectedVertex with GPU buffer updates
-- [ ] Sculpting brush implementation (Smooth, Grab, Inflate)
-- [ ] Mesh data structures and GPU buffer management (Enhanced)
+- [x] **Sculpting brush implementation (Smooth, Grab, Inflate)** - ApplySculptBrush with falloff and normal recalc
+- [x] **Mesh data structures and GPU buffer management (Enhanced)** - Optimized glBufferSubData updates
 
 ### Previous Milestones
 #### Step 1 (Window, Renderer, PySide Docking, and Bindings) - Completed
